@@ -10,7 +10,7 @@ class Simulator{
 public:
     Simulator();
 
-    void simulate(float simulate_time);
+    void simulate(int simulate_time);
 
 private:
     std::unordered_map<std::string, physicalObject> phyiscal_objects_;
