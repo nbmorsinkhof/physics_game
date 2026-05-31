@@ -5,7 +5,8 @@
 #include "simulator.h"
 
 
-Simulator::Simulator()
+Simulator::Simulator(Interface& interface)
+    : interface_{interface}
 {
 }
 
