@@ -30,10 +30,17 @@ MainWindow::MainWindow(Interface& interface, QWidget* parent)
     layout->addWidget(stopButton_);
     stopButton_->setFixedSize(200, 50);
     stopButton_->setFont(buttonFont);
+    connect(stopButton_, &QPushButton::clicked, this, &MainWindow::stop);
 }
 
 void MainWindow::start(){
     std::unordered_map<std::string, std::string> command;
     command[CMD_TYPE] = START;
+    interface_.setCommand(command);
+}
+
+void MainWindow::stop(){
+    std::unordered_map<std::string, std::string> command;
+    command[CMD_TYPE] = STOP;
     interface_.setCommand(command);
 }

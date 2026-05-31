@@ -13,9 +13,11 @@ public:
 
     void simulate(int simulate_time);
     void addPhysicalObject(std::string& name, physicalObject& physical_object);
+    void handleCommandButtons();
 private:
     std::unordered_map<std::string, physicalObject> physical_objects_;
     Interface& interface_;
+    bool running_{false};
 };
 
 #endif

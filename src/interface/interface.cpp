@@ -18,6 +18,11 @@ const std::unordered_map<std::string, std::string> Interface::getCommand(){
     return command_msg_.getMessage();
 }
 
+const bool Interface::commandPresent(){
+    return command_msg_.messagePresent();
+}
+
+/*Shared Message*/
 void sharedMessage::setMessage(const std::unordered_map<std::string, std::string> message){
     std::lock_guard<std::mutex> lock(mutex_);
     message_ = message;
@@ -28,5 +33,10 @@ const std::unordered_map<std::string, std::string> sharedMessage::getMessage(){
     std::lock_guard<std::mutex> lock(mutex_);
     message_present_ = false;
     return message_;
+}
+
+const bool sharedMessage::messagePresent(){
+    std::lock_guard<std::mutex> lock(mutex_);
+    return message_present_;
 }
 
