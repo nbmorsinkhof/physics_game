@@ -6,11 +6,11 @@
 class Integrator{
 public:
     Integrator();
-    
+
     virtual void step_next(std::vector<float>& state, const std::vector<float>& ddt_state);
 
 protected:
-    float stepsize_{0.1};
+    float stepsize_{0.01};
 };
 
 

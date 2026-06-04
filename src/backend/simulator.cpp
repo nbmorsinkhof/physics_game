@@ -5,9 +5,14 @@
 #include "simulator.h"
 #include "interface.h"
 
-Simulator::Simulator(Interface& interface)
-    : interface_{interface}
+Simulator::Simulator(
+                Interface& interface,
+                SharedItems& shared_items
+)
+    : interface_{interface},
+      shared_items_{shared_items}
 {
+    shared_items_.setSpaceObject(space_);
 }
 
 using steady_clock = std::chrono::steady_clock;
@@ -16,14 +21,13 @@ void Simulator::simulate(int simulate_time){
 
     steady_clock::time_point first_time = steady_clock::now();
     steady_clock::time_point last_time = steady_clock::now();
-    std::chrono::milliseconds dt = std::chrono::milliseconds(100);
-
+    std::chrono::milliseconds dt = std::chrono::milliseconds(10);
     while(true){
         while(running_){
-            for(std::pair<const std::string, physicalObject>& object_pair : physical_objects_){
-                physicalObject& physical_object = object_pair.second;
-                physical_object.update();
-                std::vector<float>& state = physical_object.getState();
+            for(std::pair<const std::string, std::unique_ptr<physicalObject>>& object_pair : physical_objects_){
+                physicalObject* physical_object = object_pair.second.get();
+                physical_object->update();
+                std::vector<float>& state = physical_object->getState();
                 std::cout<<object_pair.first<<std::endl;
                 for(size_t idx=0; idx<state.size(); ++idx){
                     std::cout << "state_" << idx << ":" << state[idx] << std::endl;
@@ -40,8 +44,9 @@ void Simulator::simulate(int simulate_time){
 
 }
 
-void Simulator::addPhysicalObject(std::string& name, physicalObject& physical_object){
-    physical_objects_[name] = physical_object;
+void Simulator::addPhysicalObject(std::string& name, std::unique_ptr<physicalObject> physical_object){;
+    shared_items_.addShape(name, physical_object->getShape());
+    physical_objects_[name] = std::move(physical_object);
     std::cout<<"Adding: " << name << std::endl;
     std::cout<<"Size: " << physical_objects_.size() << std::endl;
 }

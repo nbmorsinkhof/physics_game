@@ -1,6 +1,7 @@
 #include <QApplication>
 #include <thread>
 #include <atomic>
+#include <memory>
 
 #include "simulator.h"
 #include "interface.h"
@@ -10,14 +11,14 @@
 int main(int argc, char* argv[]){
     /*Interface between UI and backend*/
     Interface interface;
+    SharedItems shared_items;
     /*UI*/
     QApplication app(argc, argv);
-    MainWindow window(interface);
+    MainWindow window(interface, shared_items);
     /*Simulator */
-    Simulator simulator(interface);
-    physicalObject physical_object1;
+    Simulator simulator(interface, shared_items);
     std::string object_name{"object1"};
-    simulator.addPhysicalObject(object_name, physical_object1);
+    simulator.addPhysicalObject(object_name, std::make_unique<ElasticObject>(object_name));
     std::thread simThread(&Simulator::simulate, &simulator, 5);
 
     std::atomic<bool> running = true;

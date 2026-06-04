@@ -1,4 +1,5 @@
 #include "interface.h"
+#include <mutex>
 
 Interface::Interface(){};
 
@@ -40,3 +41,31 @@ const bool sharedMessage::messagePresent(){
     return message_present_;
 }
 
+/*Shared Items*/
+
+void SharedItems::addShape(std::string name, const Shape* shape){
+    std::lock_guard<std::mutex> lock(mutex_);
+    shapes_[name] = shape;
+}
+
+const std::unordered_map <std::string, std::unique_ptr<Shape>> SharedItems::getShapes(){
+    std::lock_guard<std::mutex> lock(mutex_);
+    std::unordered_map<std::string, std::unique_ptr<Shape>> cloned_shapes;
+    for(auto& [name, shape] : shapes_){
+        cloned_shapes[name] = shape->clone();
+    }
+    return cloned_shapes;
+}
+
+void SharedItems::setSpaceObject(Space& space){
+    std::lock_guard<std::mutex> lock(mutex_);
+    space_ = &space;
+}
+
+const Space SharedItems::getSpaceObject(){
+    std::lock_guard<std::mutex> lock(mutex_);
+    if(space_==nullptr){
+        std::cout << "space_ is nullptr" << std::endl;
+    }
+    return *space_;
+}

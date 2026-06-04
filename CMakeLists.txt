@@ -12,8 +12,11 @@ add_executable(physics_game
     src/backend/physical_object.cpp
     src/backend/physics.cpp
     src/backend/simulator.cpp
+    src/backend/space.cpp
+    src/interface/shape.cpp
 
     src/frontend/mainwindow.cpp
+    src/frontend/simulation_widget.cpp
 
     src/interface/interface.cpp
 )
