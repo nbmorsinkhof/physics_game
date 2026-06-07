@@ -16,6 +16,7 @@ public:
     );
 
     void simulate(int simulate_time);
+    void checkCollisions();
     void addPhysicalObject(std::string& name, std::unique_ptr<physicalObject> physical_object);
     void handleCommandButtons();
 private:

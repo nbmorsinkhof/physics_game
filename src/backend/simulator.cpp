@@ -21,16 +21,18 @@ void Simulator::simulate(int simulate_time){
 
     steady_clock::time_point first_time = steady_clock::now();
     steady_clock::time_point last_time = steady_clock::now();
-    std::chrono::milliseconds dt = std::chrono::milliseconds(10);
+    std::chrono::milliseconds dt = std::chrono::milliseconds(20);
     while(true){
         while(running_){
+            checkCollisions();
             for(std::pair<const std::string, std::unique_ptr<physicalObject>>& object_pair : physical_objects_){
                 physicalObject* physical_object = object_pair.second.get();
                 physical_object->update();
                 std::vector<float>& state = physical_object->getState();
-                std::cout<<object_pair.first<<std::endl;
+                //std::cout<<object_pair.first<<std::endl;
                 for(size_t idx=0; idx<state.size(); ++idx){
-                    std::cout << "state_" << idx << ":" << state[idx] << std::endl;
+                    //std::cout << "state_" << idx << ":" << state[idx] << std::endl;
+                    std::cout <<std::endl;
                     }//for
                 }//for
             std::cout<<std::endl;
@@ -42,6 +44,12 @@ void Simulator::simulate(int simulate_time){
     handleCommandButtons();
     }//while
 
+}
+
+void Simulator::checkCollisions(){
+    physicalObject* object1 = physical_objects_["object1"].get();
+    physicalObject* rigid_object = physical_objects_["rigid_body1"].get();
+    object1->checkCollision(*rigid_object);
 }
 
 void Simulator::addPhysicalObject(std::string& name, std::unique_ptr<physicalObject> physical_object){;

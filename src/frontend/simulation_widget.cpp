@@ -42,10 +42,10 @@ void SimulationWidget::paintEvent(QPaintEvent* event){
     Space space = shared_items_.getSpaceObject();
     std::unordered_map<std::string, std::unique_ptr<Shape>> shapes = shared_items_.getShapes();
     setWorldCoordinates(space.getXlims(), space.getYlims());
-    //for(auto& [name, s] : shapes){
-    //    std::cout << "From paint: " << name << std::endl;
-    //    s->draw(painter);
-    //}
+    for(auto& [name, s] : shapes){
+        std::cout << "From paint: " << name << std::endl;
+        s->draw(painter, *this);
+    }
 }
 
 const QPointF SimulationWidget::worldToScreen(float x, float y){
@@ -55,14 +55,18 @@ const QPointF SimulationWidget::worldToScreen(float x, float y){
     if(!x_width>0 || !y_height>0){
         return screen_pos;
     }
-
     int x_pixel = screen_width_*(x-world_x_lims_[0])/x_width;
     int y_pixel = screen_height_-screen_height_*(y-world_y_lims_[0])/y_height;
     screen_pos = QPointF(x_pixel, y_pixel);
     return screen_pos;
 }
 
-
+const std::vector<int> SimulationWidget::distanceToPixel(float x, float y){
+    int pixel_x = screen_width_*x/(world_x_lims_[1] - world_x_lims_[0]);
+    int pixel_y = screen_height_*y/(world_y_lims_[1] - world_y_lims_[0]);
+    std::vector<int> pixel_xy = {pixel_x, pixel_y};
+    return pixel_xy;
+}
 
 void SimulationWidget::paintBackground(QPainter& painter){
     return;

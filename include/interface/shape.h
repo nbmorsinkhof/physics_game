@@ -8,6 +8,7 @@
 
 #include "simulation_widget.h"
 class QPainter;
+class SimulationWidget;
 
 class Shape
 {
@@ -19,25 +20,41 @@ public:
 
     virtual std::unique_ptr<Shape> clone() const = 0;
 
-    
+    std::vector<float> getPos(){return position_;}
 protected:
     std::vector<float>& position_;
 private:
 };
 
+// Circle
 class Circle : public Shape
 {
 public:
-    Circle(std::vector<float>&position, float& radius);
+    Circle(std::vector<float>&position, float& radius_x, float& radius_y);
 
-    void draw(QPainter&) const override;
+    void draw(QPainter&, SimulationWidget&) const override;
 
     std::unique_ptr<Shape> clone() const override;
 
 protected:
 
 private:
-    float& radius_;
+    float& radius_x_;
+    float& radius_y_;
 };
 
+//Rectangle
+class Rectangle : public Shape
+{
+public:
+    Rectangle(std::vector<float>& position, float& width, float& height);
+
+    void draw(QPainter&, SimulationWidget&) const override;
+
+    std::unique_ptr<Shape> clone() const override;
+
+private:
+    float& width_;
+    float& height_;
+};
 #endif

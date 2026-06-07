@@ -21,8 +21,8 @@ public:
                const std::vector<float> y_lims
             );
 
-
-
+    const QPointF worldToScreen(float x, float y);
+    const std::vector<int> distanceToPixel(float x, float y);
 protected:
     void paintEvent(QPaintEvent* event) override;
 
@@ -32,7 +32,6 @@ private:
     SharedItems& shared_items_;
     std::vector<float> world_x_lims_ = {-1, 1};
     std::vector<float> world_y_lims_ = {-1, 1};
-    const QPointF worldToScreen(float x, float y);
 
     void paintBackground(QPainter& painter);
     void paintBody(QPainter& painter, const physicalObject* object);
